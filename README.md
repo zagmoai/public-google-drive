@@ -65,7 +65,7 @@ Full request/response shapes and examples are in **[SKILL.md](SKILL.md)**.
 
 ## Product
 
-[Memyard](https://memyard.com) — document intelligence and collaboration.
+[Memyard](https://memyard.com)
 
 ## License
 
