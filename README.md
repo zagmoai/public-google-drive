@@ -8,57 +8,65 @@ Memyard Drive is an agent skill that lets LLM coding agents create and edit Goog
 
 ### Claude Code
 
-Clone the repo into Claude Code's personal or project skills directory:
+Personal (all your projects):
 
 ```bash
-# Personal (available across all your projects)
 git clone https://github.com/zagmoai/memyard-drive.git ~/.claude/skills/memyard-drive
+```
 
-# Or project-scoped (shared via version control)
+Project-scoped (shared via version control):
+
+```bash
 git clone https://github.com/zagmoai/memyard-drive.git .claude/skills/memyard-drive
 ```
 
-Claude Code auto-discovers `SKILL.md` files in these directories. The skill will appear as `/memyard-drive` and Claude will also invoke it automatically when you ask to create documents or write to Google Docs/Sheets.
+Claude Code auto-discovers `SKILL.md` in these directories. The skill appears as `/memyard-drive` and Claude will also invoke it automatically when relevant.
 
 ### Cursor
 
-Clone the repo into one of Cursor's skill directories:
+**Option A — clone:**
 
 ```bash
-# Personal (available across all your projects)
 git clone https://github.com/zagmoai/memyard-drive.git ~/.cursor/skills/memyard-drive
-
-# Or project-scoped (shared via version control)
-git clone https://github.com/zagmoai/memyard-drive.git .cursor/skills/memyard-drive
 ```
 
-Cursor auto-discovers any `SKILL.md` in these directories.
+**Option B — Cursor UI:**
+Cursor Settings -> Rules -> Add Rule -> Remote Rule (Github) -> enter `https://github.com/zagmoai/memyard-drive`.
 
-### Codex / OpenClaw
+Cursor also discovers skills from `.claude/skills/` and `.codex/skills/` directories for cross-tool compatibility, so a single clone into `~/.claude/skills/` works for both Claude Code and Cursor.
 
-Ask Codex to install the skill:
+### Codex (OpenAI)
+
+**Option A — inside a Codex session**, use the built-in `$skill-installer`:
 
 ```
-install the memyard-drive skill from zagmoai/memyard-drive
+$skill-installer install https://github.com/zagmoai/memyard-drive
 ```
 
-This uses the built-in skill installer to place it in `~/.codex/skills/memyard-drive/`.
+It installs to `~/.codex/skills/`. Restart Codex after installing.
 
-### upskill
+**Option B — manual:**
 
-[upskill](https://github.com/trieloff/gh-upskill) can install skills from any GitHub repo into any agent runtime:
+Codex loads user skills from `~/.agents/skills/` per the [official docs](https://developers.openai.com/codex/skills). Some setups use `~/.codex/skills/` instead. Clone into whichever your Codex uses:
 
 ```bash
-# Install to .claude/skills/ (for Claude Code)
-upskill zagmoai/memyard-drive --all --dest-path .claude/skills
-
-# Install globally to ~/.skills/
-upskill -g zagmoai/memyard-drive --all
+git clone https://github.com/zagmoai/memyard-drive.git ~/.agents/skills/memyard-drive
+# or, if your Codex uses that path:
+# git clone https://github.com/zagmoai/memyard-drive.git ~/.codex/skills/memyard-drive
 ```
+
+### OpenClaw
+
+```bash
+# Global (shared across all agents)
+git clone https://github.com/zagmoai/memyard-drive.git ~/.openclaw/skills/memyard-drive
+```
+
+Start a new OpenClaw session to pick up the skill.
 
 ### Other runtimes
 
-Clone the repo and point your agent runtime at the `SKILL.md` file.
+Clone the repo and point your agent runtime at the `SKILL.md` file at the repository root.
 
 ## Usage
 
