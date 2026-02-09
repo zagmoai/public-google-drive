@@ -63,10 +63,6 @@ Full request/response shapes and examples are in **[SKILL.md](SKILL.md)**.
 
 - **[SKILL.md](SKILL.md)** — Full API reference, plan/execute flow, and curl examples.
 
-## Product
-
-[Memyard](https://memyard.com)
-
 ## License
 
 MIT. See [LICENSE](LICENSE).
