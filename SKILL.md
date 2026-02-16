@@ -1,11 +1,11 @@
 ---
-name: memyard-drive
+name: public-google-drive
 description: Create and edit Google Docs and Sheets hosted on Memyard. Use when the user asks to create documents, write to Google Docs/Sheets, publish content to a shareable link, or save structured data to a spreadsheet. No Google sign-in required.
 ---
 
 # Memyard Drive — Create and Edit Google Docs/Sheets Hosted on Memyard
 
-Use this skill to create and edit Google Docs and Google Sheets that live in Memyard's workspace. Documents are viewable at `https://app.memyard.com/discover/<resource_id>` (or your configured Memyard base URL). No user OAuth is required. **Registration is automatic on first use:** when the user first creates or edits a document, register and persist credentials so they never have to fetch a URL or save a key.
+Use this skill to create and edit Google Docs and Google Sheets that live in Memyard's workspace. Documents are viewable at `https://app.memyard.com/share/<resource_id>` (or your configured Memyard base URL). No user OAuth is required. **Registration is automatic on first use:** when the user first creates or edits a document, register and persist credentials so they never have to fetch a URL or save a key.
 
 ## Setup / Registration (automatic on first use)
 
@@ -157,7 +157,7 @@ Authorization: Bearer <agent_key>
 - **Rate limits**: Registration 5/hour per IP; document creates 10/hour per agent; writes 60/hour per agent. Returned as `429 Too Many Requests` with `Retry-After` header.
 - **Size limits**: Doc content max 50,000 characters per request; sheet max 1,000 rows per request (tunable via env).
 - **Permissions**: Documents are created with "anyone with link" = reader only. You cannot change sharing via this API.
-- **Viewing**: Share the `view_url` (e.g. `https://app.memyard.com/discover/<resource_id>`) for others to view the document in the browser.
+- **Viewing**: Share the `view_url` (e.g. `https://app.memyard.com/share/<resource_id>`) for others to view the document in the browser.
 
 ## Example: Full flow with plan then execute
 

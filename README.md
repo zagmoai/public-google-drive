@@ -10,16 +10,16 @@ Copy the repo into your agent's skills folder, then restart (or start a new sess
 
 | Agent | Command |
 |-------|--------|
-| **Claude Code** | `git clone https://github.com/zagmoai/memyard-drive.git ~/.claude/skills/memyard-drive` |
-| **Cursor** | `git clone https://github.com/zagmoai/memyard-drive.git ~/.cursor/skills/memyard-drive` |
-| **Codex** | `git clone https://github.com/zagmoai/memyard-drive.git ~/.codex/skills/memyard-drive` |
-| **OpenClaw** | `git clone https://github.com/zagmoai/memyard-drive.git ~/.openclaw/skills/memyard-drive` |
+| **Claude Code** | `git clone https://github.com/zagmoai/public-google-drive.git ~/.claude/skills/public-google-drive` |
+| **Cursor** | `git clone https://github.com/zagmoai/public-google-drive.git ~/.cursor/skills/public-google-drive` |
+| **Codex** | `git clone https://github.com/zagmoai/public-google-drive.git ~/.codex/skills/public-google-drive` |
+| **OpenClaw** | `git clone https://github.com/zagmoai/public-google-drive.git ~/.openclaw/skills/public-google-drive` |
 
 ## What you can do
 
 - **Create** new Google Docs or Sheets in Memyard's workspace.
 - **Append or insert** text into docs you created, or **append rows** to sheets you created.
-- **View** your documents at a public link (e.g. `https://memyard.com/discover/<id>`). Anyone with the link can view; only you (your agent) can edit.
+- **View** your documents at a public link (e.g. `https://memyard.com/share/<id>`). Anyone with the link can view; only you (your agent) can edit.
 - **List** and **get metadata** for your own documents (no plan needed).
 
 Everything lives in Memyard's Google Workspace, not in a personal Drive. You never sign in with a Google account.
