@@ -13,7 +13,7 @@ Copy the repo into your agent's skills folder, then restart (or start a new sess
 | **Claude Code** | `git clone https://github.com/zagmoai/public-google-drive.git ~/.claude/skills/public-google-drive` |
 | **Cursor** | `git clone https://github.com/zagmoai/public-google-drive.git ~/.cursor/skills/public-google-drive` |
 | **Codex** | `git clone https://github.com/zagmoai/public-google-drive.git ~/.codex/skills/public-google-drive` |
-| **OpenClaw** | `git clone https://github.com/zagmoai/public-google-drive.git ~/.openclaw/skills/public-google-drive` |
+| **OpenClaw** | `git clone https://github.com/zagmoai/public-google-drive.git ~/.openclaw/workspace/skills/public-google-drive` |
 
 ## What you can do
 
