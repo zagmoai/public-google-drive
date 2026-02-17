@@ -1,9 +1,9 @@
 ---
 name: public-google-drive
-description: Create and edit Google Docs and Sheets hosted on Memyard. Use when the user asks to create documents, write to Google Docs/Sheets, publish content to a shareable link, or save structured data to a spreadsheet. No Google sign-in required.
+description: Create public Google Docs or Google Sheet files without requiring OAuth. Use this skill to create and edit Google Docs and Sheets, no Google sign-in required. Documents are viewable at shareable links. Registration is automatic on first use.
 ---
 
-# Memyard Drive — Create and Edit Google Docs/Sheets Hosted on Memyard
+# Public Google Drive — Create and Edit Google Docs/Sheets Hosted on Memyard
 
 Use this skill to create and edit Google Docs and Google Sheets that live in Memyard's workspace. Documents are viewable at `https://app.memyard.com/share/<resource_id>` (or your configured Memyard base URL). No user OAuth is required. **Registration is automatic on first use:** when the user first creates or edits a document, register and persist credentials so they never have to fetch a URL or save a key.
 
