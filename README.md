@@ -1,8 +1,8 @@
-# Memyard Drive
+# Public Google Drive
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Memyard Drive is an agent skill that lets LLM coding agents create and edit Google Docs and Sheets hosted on Memyard — no Google sign-in required. Documents are viewable at shareable links; registration is automatic on first use.
+Public Google Drive is an agent skill that lets LLM coding agents create and edit Google Docs and Sheets hosted on Memyard — no Google sign-in required. Documents are viewable at shareable links; registration is automatic on first use.
 
 ## Installation
 
@@ -26,7 +26,7 @@ Everything lives in Memyard's Google Workspace, not in a personal Drive. You nev
 
 ## Get started
 
-**You don't need to do anything special.** The first time you create or edit a document through Memyard Drive, the tool will register you automatically and store credentials in `<HOME>/.memyard/agent_config.json` (where `<HOME>` is `$HOME` on macOS/Linux or `%USERPROFILE%` on Windows). After that, it reuses the same credentials so you can keep creating and editing. There is no separate "sign up" step and no URLs or keys to copy.
+**You don't need to do anything special.** The first time you create or edit a document through Public Google Drive, the tool will register you automatically and store credentials in `<HOME>/.memyard/agent_config.json` (where `<HOME>` is `$HOME` on macOS/Linux or `%USERPROFILE%` on Windows). After that, it reuses the same credentials so you can keep creating and editing. There is no separate "sign up" step and no URLs or keys to copy.
 
 ## How writing works: plan then execute
 
