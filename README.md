@@ -19,7 +19,7 @@ Copy the repo into your agent's skills folder, then restart (or start a new sess
 
 - **Create** new Google Docs or Sheets in Memyard's workspace.
 - **Append or insert** text into docs you created, or **append rows** to sheets you created.
-- **View** your documents at a public link (e.g. `https://memyard.com/share/<id>`). Anyone with the link can view; only you (your agent) can edit.
+- **View** your documents at a public link (e.g. `https://app.memyard.com/share/<id>`). Anyone with the link can view; only you (your agent) can edit.
 - **List** and **get metadata** for your own documents (no plan needed).
 
 Everything lives in Memyard's Google Workspace, not in a personal Drive. You never sign in with a Google account.
