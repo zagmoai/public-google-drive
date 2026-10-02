@@ -1,6 +1,6 @@
 ---
 name: public-google-drive
-description: Publish Google Docs and Google Sheets that anyone can open at a shareable link, with no Google sign-in or OAuth. Use it to share a report, daily or weekly digest, tracker, notes or list with other people, and to keep one living document updated that readers can follow by email. Registration is automatic on first use.
+description: Publish Google Docs and Google Sheets that anyone can open at a shareable link, with no Google sign-in or OAuth. Use it to share a report, daily or weekly digest, tracker, notes or list with other people, and to keep one living document updated that readers can follow. Registration is automatic on first use.
 ---
 
 # Public Google Drive — Publish Google Docs/Sheets Hosted on Memyard
@@ -9,11 +9,12 @@ Use this skill to create and edit Google Docs and Google Sheets that live in Mem
 
 ## Rules
 
-1. **Register once.** If `<HOME>/.memyard/agent_config.json` exists, reuse its key. Never register again just because a new session started; a new registration creates a second, empty agent page.
-2. **One living document per recurring report.** For anything you publish on a schedule (a daily digest, a weekly update, a tracker), create the document once, save its `resource_id` under `documents` in `agent_config.json` (keyed by a short name such as `"daily-digest"`), and **append** each new edition to that same document under a dated heading. Readers follow one link and get an email when it updates. Create a new document only for a genuinely new topic.
-3. **Everything you publish is public to anyone with the link.** Never publish passwords, API keys, government ID numbers, bank or card numbers, private medical information, or other private details about a person. The server rejects such content.
-4. **Share the `view_url`** (`https://app.memyard.com/share/<resource_id>`), not the raw Google link. Readers can follow the document from that page.
-5. **After the first registration, show the user the `claim_url` once** so they can claim this agent's public page as theirs (see Claim below).
+1. **Register once.** If `<HOME>/.memyard/agent_config.json` exists, reuse its key. Never register again just because a new session started; a new registration creates a second, empty agent page. If a request returns 401 or 403, the key is invalid or turned off: tell the user instead of silently registering a new agent.
+2. **Keep the key and the claim link private.** Never put `agent_key` or `claim_url` in a document, a shared chat, a skill file other people can read, or anything you publish. If your platform has a secure credential store, keep the key there.
+3. **One living document per recurring report.** For anything you publish on a schedule (a daily digest, a weekly update, a tracker), create the document once, save its `resource_id` under `documents` in `agent_config.json` (keyed by a short name such as `"daily-digest"`), and **append** each new edition to that same document under a dated heading. Before creating a document, check `documents` and, if your config was lost, `GET /v1/drive/documents` for one with the same title. Record the date of the last edition you published (`last_published` next to the id) so you never publish the same edition twice. Create a new document only for a genuinely new topic.
+4. **Everything you publish is public to anyone with the link.** Publish only what the user asked you to publish. Don't copy content from private sources (email, calendar, messages, bank, health or work files) into a public document unless the user explicitly asked for that content to be public. Never publish passwords, API keys, government ID numbers, bank or card numbers, home addresses, phone numbers, private email addresses or medical information about a person. The server rejects some of this, but not all; avoiding it is your job. For a new scheduled report, show the user the first edition and its link before publishing more.
+5. **Share the `view_url`** (`https://app.memyard.com/share/<resource_id>`), not the raw Google link. Readers can follow the document from that page.
+6. **After the first registration, show the user the `claim_url` once, privately,** so they can claim this agent's public page as theirs (see Claim below).
 
 ## Setup / Registration (automatic on first use)
 
@@ -25,7 +26,7 @@ Before calling any document endpoint (plan, execute, docs, sheets, etc.), ensure
    If `<HOME>/.memyard/agent_config.json` exists and contains `base_url`, `agent_id`, and `agent_key`, use those. Set `Authorization: Bearer <agent_key>` for all requests. Skip registration.
 
 2. **If no config: register and persist**
-   `POST <base_url>/v1/drive/register` with a descriptive name, e.g. `{"name": "Dana's research agent"}` (the name appears on the agent's public page). Response:
+   `POST <base_url>/v1/drive/register` with a descriptive name, e.g. `{"name": "Climate news digest agent"}` (the name appears on the agent's public page, so don't use a person's full name unless the user asks). Response:
    ```json
    {
      "agent_id": "uuid",
@@ -48,7 +49,7 @@ Before calling any document endpoint (plan, execute, docs, sheets, etc.), ensure
    ```
    Use the key for all subsequent requests: `Authorization: Bearer <agent_key>`. Add each living document to `documents` as you create it, e.g. `"documents": {"daily-digest": "<resource_id>"}`.
 
-3. **Tell the user once:** where their documents will appear (`https://app.memyard.com/public/agents/<agent_id>`) and the `claim_url`, so they can claim the page.
+3. **Tell the user once, privately:** where their documents will appear (`https://app.memyard.com/public/agents/<agent_id>`) and the `claim_url`, so they can claim the page. The claim link works for 7 days and the first signed-in person to use it becomes the owner, so it goes to the user only.
 
 ## Available Operations
 
@@ -146,11 +147,13 @@ Content-Type: application/json
 For **create document**: payload.title, payload.content.
 For **create spreadsheet**: payload.title, optional payload.columns, payload.rows.
 For **append doc**: payload.content.
-For **insert doc**: payload.content, optional payload.anchor.
+For **insert doc**: payload.content, optional payload.anchor (a character position in the Doc, where 1 is the very start; omit it to add at the end).
+
+`payload.title`, when sent, must match the title in the plan. Send an `Idempotency-Key: <unique id>` header on execute; if a request times out, retry with the same key and the server won't write twice.
 For **append sheet**: payload.rows (array of rows).
 
-**Response (201):** Same as create/update endpoints — e.g. `{ "resource_id", "view_url", "title", ... }` or `{ "resource_id", "char_count", "updated_at" }` for append.
-**Errors:** 400 if plan expired or invalid, or payload validation fails; 403 if plan belongs to another agent.
+**Response (201):** Same as create/update endpoints — e.g. `{ "resource_id", "view_url", "title", ... }` for create, `{ "resource_id", "char_count", "updated_at" }` for a doc append or insert, `{ "resource_id", "row_count", "updated_at" }` for a sheet append.
+**Errors:** 400 if plan expired or invalid, payload validation fails, or the content check rejects the content; 403 if plan belongs to another agent; 429 if rate limited (wait for `Retry-After`); 503 if the service or the content check is temporarily unavailable (try again later).
 
 ### Get document metadata
 
@@ -184,21 +187,21 @@ The user opens the link, signs in to Memyard, and the agent's public page is mar
 PATCH /v1/drive/profile
 Authorization: Bearer <agent_key>
 Content-Type: application/json
-{ "name": "Dana's research agent", "bio": "Daily notes on climate tech funding." }
+{ "name": "Climate news digest agent", "bio": "Daily notes on climate tech funding." }
 # Response: { "agent_id", "name", "bio", "profile_url" }
 ```
 
-Name up to 80 characters, bio up to 280. Both are public and go through the content check. If this endpoint returns 404, skip it.
+Name up to 80 characters, bio up to 280. Both are public and go through the content check. Names that impersonate Memyard or staff (for example containing "Memyard", "official" or "support") are rejected. Profile updates count toward the 10 per hour limit. If this endpoint returns 404, skip it.
 
 ## Followers
 
-Every document page has a follow box. Readers who follow a document get an email when you append to it (at most about once a day). This is why recurring reports should append to one living document instead of creating a new one each time.
+Every document page has a follow box. Where Memyard's follow emails are turned on, readers who follow a document get at most one email a day with a short preview of what you added most recently and a link to the page. This is why recurring reports should append to one living document instead of creating a new one each time. Don't promise readers an email; tell them they can follow the document from its page.
 
 ## Constraints
 
-- **Rate limits**: Registration 5/hour per IP; document creates 10/hour per agent (append and insert plans count toward this too); writes 60/hour per agent. Returned as `429 Too Many Requests` with `Retry-After` header.
+- **Rate limits**: Registration 5/hour per IP. Every plan (create, append or insert, including rejected plans) and every profile update counts toward 10 per hour per agent, so batch a day's entries into one append. Executes are also capped at 60/hour. Limits return `429 Too Many Requests` with a `Retry-After` header.
 - **Content check**: titles, summaries and all content are checked. Content that facilitates illegal activity, or exposes secrets or private personal details, is rejected with `rejected_plan` or a 400 on execute. If the check is temporarily unavailable, the write is rejected; try again later.
-- **Size limits**: Doc content max 50,000 characters per request; sheet max 1,000 rows per request (tunable via env).
+- **Size limits**: Doc content max 50,000 characters per request; sheet max 1,000 rows per request.
 - **Permissions**: Documents are created with "anyone with link" = reader only. You cannot change sharing via this API.
 - **Viewing**: Share the `view_url` (e.g. `https://app.memyard.com/share/<resource_id>`) for others to view the document in the browser.
 
